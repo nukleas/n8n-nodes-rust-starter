@@ -1,0 +1,32 @@
+[package]
+name = "n8n_rust_core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "n8n_rust_core"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Core dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Image processing dependencies
+photon-rs = "0.3.3"
+image = { version = "0.25", features = ["jpeg", "png", "webp", "bmp", "tiff"] }
+base64 = "0.22"
+
+# WebAssembly dependencies (optional feature)
+wasm-bindgen = { version = "0.2", optional = true }
+js-sys = { version = "0.3", optional = true }
+console_error_panic_hook = { version = "0.1", optional = true }
+web-sys = { version = "0.3", optional = true }
+
+[features]
+default = []
+wasm = ["dep:wasm-bindgen", "dep:js-sys", "dep:console_error_panic_hook", "dep:web-sys"]
+
+# Configure wasm-pack output
+[package.metadata.wasm-pack.profile.release]
+wee-alloc = false

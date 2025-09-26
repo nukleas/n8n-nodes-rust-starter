@@ -1,55 +1,67 @@
 {
-  "name": "n8n-nodes-<...>",
-  "version": "0.1.0",
-  "description": "",
-  "keywords": [
-    "n8n-community-node-package"
-  ],
-  "license": "MIT",
-  "homepage": "",
-  "author": {
-    "name": "",
-    "email": ""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
-  },
-  "engines": {
-    "node": ">=20.15"
-  },
-  "main": "index.js",
-  "scripts": {
-    "build": "npx rimraf dist && tsc && gulp build:icons",
-    "dev": "tsc --watch",
-    "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
-  },
-  "files": [
-    "dist"
-  ],
-  "n8n": {
-    "n8nNodesApiVersion": 1,
-    "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
-    ],
-    "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
-    ]
-  },
-  "devDependencies": {
-    "@typescript-eslint/parser": "~8.32.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-n8n-nodes-base": "^1.16.3",
-    "gulp": "^5.0.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
-  },
-  "peerDependencies": {
-    "n8n-workflow": "*"
-  }
+    "name": "n8n-nodes-photon-image-processor",
+    "version": "0.1.0",
+    "description": "High-performance image processing n8n node powered by Rust/WebAssembly and photon-rs. Features filters, transformations, color adjustments, and effects with binary/base64 output support.",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"image-processing",
+		"rust",
+		"webassembly",
+		"wasm",
+		"photon",
+		"filters",
+		"computer-vision",
+		"automation",
+		"workflow"
+	],
+	"license": "MIT",
+    "homepage": "https://github.com/naderheidari/n8n-nodes-photon-image-processor",
+    "author": {
+        "name": "Nader Heidari",
+        "email": "nader@example.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/naderheidari/n8n-nodes-photon-image-processor.git"
+    },
+	"engines": {
+		"node": ">=20.15"
+	},
+	"main": "index.js",
+	"scripts": {
+		"build": "pnpm run build-rust && npx rimraf dist && tsc && gulp build:icons && pnpm run copy-wasm",
+		"build-rust": "cd src-rust && wasm-pack build --target nodejs --out-dir pkg --features wasm",
+		"copy-wasm": "mkdir -p dist/wasm && cp -r src-rust/pkg/* dist/wasm/",
+		"dev": "tsc --watch",
+		"dev-rust": "pnpm run build-rust && pnpm run copy-wasm",
+    "format": "prettier nodes shared --write",
+    "lint": "eslint nodes package.json",
+    "lintfix": "eslint nodes package.json --fix",
+    "prepublishOnly": "pnpm run build && pnpm run lint -c .eslintrc.prepublish.js nodes package.json",
+		"test-rust": "cd src-rust && cargo test"
+	},
+	"files": [
+		"dist",
+		"dist/wasm"
+	],
+    "n8n": {
+        "n8nNodesApiVersion": 1,
+        "credentials": [],
+        "nodes": [
+            "dist/nodes/PhotonImageProcessor/PhotonImageProcessor.node.js"
+        ]
+    },
+	"devDependencies": {
+		"@typescript-eslint/parser": "~8.32.0",
+		"eslint": "^8.57.0",
+		"eslint-plugin-n8n-nodes-base": "^1.16.3",
+		"gulp": "^5.0.0",
+		"prettier": "^3.5.3",
+		"typescript": "^5.8.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	},
+	"packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748"
 }
